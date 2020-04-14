@@ -280,12 +280,30 @@ const getPermit = async function(token, value) {
     }
   );
 };
-
+const getAmountOut = async function(
+  inputAmount,
+  inputTokenName,
+  outputTokenName
+) {
+  if (web3 && contract) {
+    let path = [
+      config.address[inputTokenName],
+      config.address[outputTokenName]
+    ];
+    let amountsOut = await contract.methods
+      .getAmountsOut(inputAmount, path)
+      .call();
+    return amountsOut[1];
+  } else {
+    alert("connectWallet first");
+  }
+};
+// const addLiquidity(token1Name,token2Name,)
 const init = async function() {
   await connectWallet();
-
-  await getPermit("mDAI", 1000000000000);
-
+  //await getPermit("mDAI", 1000000000000);
+  let amountOut = await getAmountOut(100, "mBTC", "MANA");
+  console.log(amountOut);
   //
   // //
   // await swap(
